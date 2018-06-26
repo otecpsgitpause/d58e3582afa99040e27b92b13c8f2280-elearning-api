@@ -18,6 +18,7 @@ var conexion= {
         mongoose.disconnect().then(()=>{
         
             let db=dbcon;
+            console.log({dbcon:dbcon});
             if(db.conexionuse==="dev"){
                 if(db.conexiondev.encrypt==true){
                     crypto.decode(db.conexiondev.link).then((link)=>{
