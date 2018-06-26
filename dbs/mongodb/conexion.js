@@ -2,6 +2,7 @@ var configuracion = require('./configuracion.json');
 var crypto = require('../../crypto/cryptojs');
 var mongoose = require('mongoose');
 var mailReport= require('../../mail/mail-info-server');
+var dbcon =process.env.configuraciondb;
 const mongoOptions={
     autoIndex: false, // Don't build indexes
     reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
@@ -16,7 +17,7 @@ var conexion= {
         
         mongoose.disconnect().then(()=>{
         
-            let db=process.env.configuraciondb
+            let db=dbcon.dbs[0];
             if(db.conexionuse==="dev"){
                 if(db.conexiondev.encrypt==true){
                     crypto.decode(db.conexiondev.link).then((link)=>{
