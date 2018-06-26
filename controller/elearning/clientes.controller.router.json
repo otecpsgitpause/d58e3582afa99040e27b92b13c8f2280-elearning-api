@@ -52,5 +52,11 @@
         "descripcion":"",
         "metodo":"POST",
         "numero":"8"
+    },
+    {
+        "ruta":"/comprar-curso",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"9"
     }
 ]

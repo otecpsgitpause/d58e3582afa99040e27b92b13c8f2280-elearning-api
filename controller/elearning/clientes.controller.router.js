@@ -36,9 +36,9 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
         schemaCliente.findOne({ "correo": param }).populate('inscripcionCursos').exec().then((docEstudiante) => {
             let secuencia = {
                 populateCursos: () => {
-                    
+
                     return new Promise((resolve, reject) => {
-                  
+
                         let contador = 0;
                         docEstudiante.inscripcionCursos.forEach((inscripcion, idx) => {
                             contador = contador + 1;
@@ -130,14 +130,14 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
 
         let data = req.body.data;
         let param = data.param;
-    
+
 
         //
         schemaInscCursoCliente.findOne({ "_id": param.inscripcion }).populate('curso').populate('avancescurso').exec().then((docInscripcion) => {
             let secuencia = {
                 populateModulos: () => {
                     return new Promise((resolve, reject) => {
-                        console.log({fechaCreacion:docInscripcion.fechaCreacion});
+                        console.log({ fechaCreacion: docInscripcion.fechaCreacion });
                         schemaCurso.findOne({ "_id": docInscripcion.curso._id }).populate('modulos')
                             .populate('pruebas').exec().then((docCurso) => {
                                 docInscripcion.curso = docCurso;
@@ -270,95 +270,95 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
         let data = req.body.data;
         let param = data.param;
 
-        console.log({getPruebaParam:param});
+        console.log({ getPruebaParam: param });
 
-        schemaPrueba.findOne({"_id":param.prueba}).populate('preguntas').exec().then((docPrueba)=>{
+        schemaPrueba.findOne({ "_id": param.prueba }).populate('preguntas').exec().then((docPrueba) => {
 
-            let secuencia={
-                populateAlternativas:()=>{
-                    return new Promise((resolve,reject)=>{
-                        let contador=0;
-                        docPrueba.preguntas.forEach((pregunta,idx)=>{
-                            schemaPregunta.findOne({"_id":pregunta._id}).populate('alternativas').exec().then((docPregunta)=>{
-                                docPrueba.preguntas.splice(idx,1,docPregunta);
-                                contador=contador+1;
-                                if(contador==docPrueba.preguntas.length){
+            let secuencia = {
+                populateAlternativas: () => {
+                    return new Promise((resolve, reject) => {
+                        let contador = 0;
+                        docPrueba.preguntas.forEach((pregunta, idx) => {
+                            schemaPregunta.findOne({ "_id": pregunta._id }).populate('alternativas').exec().then((docPregunta) => {
+                                docPrueba.preguntas.splice(idx, 1, docPregunta);
+                                contador = contador + 1;
+                                if (contador == docPrueba.preguntas.length) {
                                     resolve(true);
                                 }
                             })
-                            
+
 
                         })
 
-                        if(docPrueba.preguntas.length==0){
+                        if (docPrueba.preguntas.length == 0) {
                             resolve(true);
                         }
-                        
+
                     })
                 },
-                iniciarPrueba:()=>{
-                    return new Promise((resolve,reject)=>{
-                        schemaPruebaHojaRespuesta.findOne({"prueba":param.prueba,"alumno":param.alumno}).then((docFind)=>{
-                            console.log({docFind:docFind});
-                            if(docFind==null){
-                                let now =moment().tz('America/Santiago').format();
-                                console.log({now:now});
-                            
-                                let saveHojaRespuesta= new schemaPruebaHojaRespuesta();
-                                let  duracionSplit= docPrueba.duracion.split(':');
-                                let addTime=momento(now).add(Number.parseInt(duracionSplit[0]),'h').add(Number.parseInt(duracionSplit[1]),'m').format();
-                                saveHojaRespuesta.prueba= param.prueba;
+                iniciarPrueba: () => {
+                    return new Promise((resolve, reject) => {
+                        schemaPruebaHojaRespuesta.findOne({ "prueba": param.prueba, "alumno": param.alumno }).then((docFind) => {
+                            console.log({ docFind: docFind });
+                            if (docFind == null) {
+                                let now = moment().tz('America/Santiago').format();
+                                console.log({ now: now });
+
+                                let saveHojaRespuesta = new schemaPruebaHojaRespuesta();
+                                let duracionSplit = docPrueba.duracion.split(':');
+                                let addTime = momento(now).add(Number.parseInt(duracionSplit[0]), 'h').add(Number.parseInt(duracionSplit[1]), 'm').format();
+                                saveHojaRespuesta.prueba = param.prueba;
                                 saveHojaRespuesta.inicio = now;
-                                saveHojaRespuesta.termino=addTime;
-                                saveHojaRespuesta.alumno=param.alumno;
-                           
-                                schemaPruebaHojaRespuesta.create(saveHojaRespuesta).then((docCreate)=>{
-                                    
+                                saveHojaRespuesta.termino = addTime;
+                                saveHojaRespuesta.alumno = param.alumno;
+
+                                schemaPruebaHojaRespuesta.create(saveHojaRespuesta).then((docCreate) => {
+
                                     resolve(true);
                                 })
-                                
-                            }else{
-                                
+
+                            } else {
+
                                 resolve(true);
                             }
                         })
                     })
                 },
-                validarFechaPrueba:()=>{
-                    return new Promise((resolve,reject)=>{
-                        schemaPruebaHojaRespuesta.findOne({"prueba":param.prueba,"alumno":param.alumno}).then((docHRP)=>{
-                           let now=moment().tz('America/Santiago').format();
-                           let termino = moment(docHRP.termino).tz('America/Santiago').format();
-                           let numberValid =momento(now).diff(moment(termino),'seconds')
-                           console.log({diferenciaFecha:momento(now).diff(moment(termino),'seconds')});
-                            if(numberValid<0){
-                                resolve({contestar:true,docHRP:docHRP});
-                            }else{
-                                resolve({contestar:false,docHRP:docHRP});
+                validarFechaPrueba: () => {
+                    return new Promise((resolve, reject) => {
+                        schemaPruebaHojaRespuesta.findOne({ "prueba": param.prueba, "alumno": param.alumno }).then((docHRP) => {
+                            let now = moment().tz('America/Santiago').format();
+                            let termino = moment(docHRP.termino).tz('America/Santiago').format();
+                            let numberValid = momento(now).diff(moment(termino), 'seconds')
+                            console.log({ diferenciaFecha: momento(now).diff(moment(termino), 'seconds') });
+                            if (numberValid < 0) {
+                                resolve({ contestar: true, docHRP: docHRP });
+                            } else {
+                                resolve({ contestar: false, docHRP: docHRP });
                             }
                         })
 
                     })
                 },
-                getData:()=>{
-                    return new Promise((resolve,reject)=>{
-                        
-                        secuencia.validarFechaPrueba().then((prueba)=>{
-                            if(prueba.contestar==true){
-                                schemaPruebaHojaRespuesta.findOne({"prueba":param.prueba,"alumno":param.alumno}).then((docHRP)=>{
-                                    resolve({docHRP:docHRP,docPrueba:docPrueba});
+                getData: () => {
+                    return new Promise((resolve, reject) => {
+
+                        secuencia.validarFechaPrueba().then((prueba) => {
+                            if (prueba.contestar == true) {
+                                schemaPruebaHojaRespuesta.findOne({ "prueba": param.prueba, "alumno": param.alumno }).then((docHRP) => {
+                                    resolve({ docHRP: docHRP, docPrueba: docPrueba });
                                 })
-                                
-                            }else{
-                                prueba.docHRP.terminada=true;
-                                schemaPruebaHojaRespuesta.updateOne({'_id':prueba.docHRP._id},prueba.docHRP).where('terminada').equals(false).then((docUpdate)=>{
-                                    console.log({docHRPUpdate:docUpdate});
-                                    schemaPruebaHojaRespuesta.findOne({"prueba":param.prueba,"alumno":param.alumno}).then((docHRP)=>{
-                                        resolve({docHRP:docHRP,docPrueba:docPrueba});
+
+                            } else {
+                                prueba.docHRP.terminada = true;
+                                schemaPruebaHojaRespuesta.updateOne({ '_id': prueba.docHRP._id }, prueba.docHRP).where('terminada').equals(false).then((docUpdate) => {
+                                    console.log({ docHRPUpdate: docUpdate });
+                                    schemaPruebaHojaRespuesta.findOne({ "prueba": param.prueba, "alumno": param.alumno }).then((docHRP) => {
+                                        resolve({ docHRP: docHRP, docPrueba: docPrueba });
                                     })
-                     
+
                                 })
-                                
+
                             }
                         })
 
@@ -372,7 +372,7 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
 
 
             const steps = [
-                secuencia.populateAlternativas,secuencia.iniciarPrueba,secuencia.getData
+                secuencia.populateAlternativas, secuencia.iniciarPrueba, secuencia.getData
             ];
             const sequence = new Sequence(steps, { interval: 1000 });
             sequence.on('success', (data, index) => {
@@ -415,48 +415,48 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
         let data = req.body.data;
         let param = data.param;
 
-        console.log({paramEndPrueba:param});
+        console.log({ paramEndPrueba: param });
 
-        schemaPruebaHojaRespuesta.findOne({"prueba":param.prueba,'alumno':param.alumno}).populate('prueba').exec().then((docHRP)=>{
-            let secuencia={
-                calcularAprovacion:()=>{
-                    return new Promise((resolve,reject)=>{
-                        if(Object.keys(param).indexOf('preguntas')>-1){
-                            let buenas=0;
-                            let contador=0;
-                            param.preguntas.forEach((respuesta)=>{
-                                console.log({respuesta:respuesta.alternativa});
-                                if(respuesta.alternativa.correcta==true || respuesta.alternativa.correcta=='true'){
-                                    buenas=buenas+1;
-                                    contador=contador+1;
-                                }else{
-                                    contador=contador+1;
+        schemaPruebaHojaRespuesta.findOne({ "prueba": param.prueba, 'alumno': param.alumno }).populate('prueba').exec().then((docHRP) => {
+            let secuencia = {
+                calcularAprovacion: () => {
+                    return new Promise((resolve, reject) => {
+                        if (Object.keys(param).indexOf('preguntas') > -1) {
+                            let buenas = 0;
+                            let contador = 0;
+                            param.preguntas.forEach((respuesta) => {
+                                console.log({ respuesta: respuesta.alternativa });
+                                if (respuesta.alternativa.correcta == true || respuesta.alternativa.correcta == 'true') {
+                                    buenas = buenas + 1;
+                                    contador = contador + 1;
+                                } else {
+                                    contador = contador + 1;
                                 }
 
-                                if(contador==param.preguntas.length){
+                                if (contador == param.preguntas.length) {
                                     //set hoja respuesta
-                                    let aprovacion=((docHRP.prueba.porcentajeAprovacion*docHRP.prueba.preguntas.length)/100);
-                                    if(buenas>= Number.parseInt(aprovacion)){
-                                        docHRP.aprovado=true;
+                                    let aprovacion = ((docHRP.prueba.porcentajeAprovacion * docHRP.prueba.preguntas.length) / 100);
+                                    if (buenas >= Number.parseInt(aprovacion)) {
+                                        docHRP.aprovado = true;
                                         resolve(true);
-                                    }else{
+                                    } else {
                                         resolve(true);
                                     }
-                                   
-                                } 
-                            })
-                            console.log({preguntas:param.preguntas,prueba:docHRP.prueba});
 
-                        }else{
+                                }
+                            })
+                            console.log({ preguntas: param.preguntas, prueba: docHRP.prueba });
+
+                        } else {
                             resolve(true);
                         }
                     })
                 },
-                cerrarPrueba:()=>{
-                    return new Promise((resolve,reject)=>{
-                        docHRP.preguntas=param.preguntas;
-                        docHRP.terminada=true;
-                        schemaPruebaHojaRespuesta.updateOne({"_id":docHRP._id},docHRP).then((docUpdate)=>{
+                cerrarPrueba: () => {
+                    return new Promise((resolve, reject) => {
+                        docHRP.preguntas = param.preguntas;
+                        docHRP.terminada = true;
+                        schemaPruebaHojaRespuesta.updateOne({ "_id": docHRP._id }, docHRP).then((docUpdate) => {
                             resolve(true);
                         }).catch(err => {
                             resolve(true);
@@ -466,32 +466,32 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
             }
 
             const steps = [
-                secuencia.calcularAprovacion,secuencia.cerrarPrueba
-              ];
-              const sequence = new Sequence(steps, { interval: 1000 });
-              sequence.on('success', (data, index) => {
-                  console.log({ data: data, index: index });
-                  if (index == 1) {
-                      respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: data.value, error: null } });
-                  }
-                  // execute when each step in sequence succeed
-              });
-      
-              sequence.on('failed', (data, index) => {
-                  console.log({ failed: data, index: index });
-                  // execute when each step in sequence failed
-              });
-      
-              sequence.on('end', () => {
-                  // execute after finishing all steps in the sequence
-      
-              });
-      
+                secuencia.calcularAprovacion, secuencia.cerrarPrueba
+            ];
+            const sequence = new Sequence(steps, { interval: 1000 });
+            sequence.on('success', (data, index) => {
+                console.log({ data: data, index: index });
+                if (index == 1) {
+                    respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: data.value, error: null } });
+                }
+                // execute when each step in sequence succeed
+            });
+
+            sequence.on('failed', (data, index) => {
+                console.log({ failed: data, index: index });
+                // execute when each step in sequence failed
+            });
+
+            sequence.on('end', () => {
+                // execute after finishing all steps in the sequence
+
+            });
+
 
 
         })
 
-    }catch(e){
+    } catch (e) {
 
         respuesta.sendDev({ req: req, res: res, code: 500, respuesta: { doc: false, error: 'Error inesperado' } });
 
@@ -508,15 +508,15 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
 
         let data = req.body.data;
         let param = data.param;
-        console.log({clienteParam:param});
-        schemaCliente.findOne({'correo':param.correo}).then((docCliente)=>{
-            respuesta.sendDev({ req: req, res: res, code: 200, respuesta:{doc:docCliente,error:null} }); 
+        console.log({ clienteParam: param });
+        schemaCliente.findOne({ 'correo': param.correo }).then((docCliente) => {
+            respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: docCliente, error: null } });
         }).catch(err => {
-            respuesta.sendDev({ req: req, res: res, code: 500, respuesta: {doc:null,error:'Error en la petición'} });
+            respuesta.sendDev({ req: req, res: res, code: 500, respuesta: { doc: null, error: 'Error en la petición' } });
         })
 
 
-    }catch(e){
+    } catch (e) {
         respuesta.sendDev({ req: req, res: res, code: 500, respuesta: { doc: null, error: 'Error inesperado' } });
     }
 
@@ -532,16 +532,16 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
         let data = req.body.data;
         let param = data.param;
 
-        schemaPruebaHojaRespuesta.findOne({'_id':param.resultadoId}).populate('prueba').exec().then((docHRP)=>{
-            respuesta.sendDev({ req: req, res: res, code: 200, respuesta:{doc:docHRP,error:null} }); 
+        schemaPruebaHojaRespuesta.findOne({ '_id': param.resultadoId }).populate('prueba').exec().then((docHRP) => {
+            respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: docHRP, error: null } });
         }).catch(err => {
-            respuesta.sendDev({ req: req, res: res, code: 500, respuesta: {doc:null,error:'Error en la petición'} });
+            respuesta.sendDev({ req: req, res: res, code: 500, respuesta: { doc: null, error: 'Error en la petición' } });
         })
 
 
 
 
-    }catch(e){
+    } catch (e) {
         respuesta.sendDev({ req: req, res: res, code: 500, respuesta: { doc: null, error: 'Error inesperado' } });
     }
 }).post(rutas[8].ruta, (req, res, next) => {
@@ -555,29 +555,41 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
         let data = req.body.data;
         let param = data.param;
 
-        let secuencia ={
-            updateTimeClase:()=>{
-                return new Promise((resolve,reject)=>{
-                    schemaClase.findOne({'_id':param.clase}).then((docClase)=>{
-                        
+        let secuencia = {
+            updateTimeClase: () => {
+                return new Promise((resolve, reject) => {
+                    schemaClase.findOne({ '_id': param.clase }).then((docClase) => {
+
                     })
                 })
             },
-            updateTimeModulo:()=>{
-                return new Promise((resolve,reject)=>{
-                    
+            updateTimeModulo: () => {
+                return new Promise((resolve, reject) => {
+
                 })
-            },updateTimeCurso:()=>{
-                return new Promise((resolve,reject)=>{
-                    
+            }, updateTimeCurso: () => {
+                return new Promise((resolve, reject) => {
+
                 })
             }
         }
-        
 
 
-    }catch(e){
+
+    } catch (e) {
         respuesta.sendDev({ req: req, res: res, code: 500, respuesta: { doc: null, error: 'Error inesperado' } });
+    }
+}).post(rutas[9].ruta, (req, res, next) => {
+    /**
+         * Metodo registra un estudiante en un curso
+         * @param param
+         */
+
+    try {
+        let data = req.body;
+        console.log({registroEstudiante:data});
+    } catch (e) {
+
     }
 })
 
