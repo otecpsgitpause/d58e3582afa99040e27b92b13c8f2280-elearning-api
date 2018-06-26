@@ -33,7 +33,7 @@ var conexion= {
                     mongoose.connect(db.conexiondev.link,mongoOptions)
                     .then((status)=>{
                         console.log({mongodbstatus:'ok'});
-                    },err=>{mailReport.send({from:'sendmailotecpausa@gmail.com',
+                    },err=>{console.log({errorConexion:err});mailReport.send({from:'sendmailotecpausa@gmail.com',
                     to:'rpemcampos@gmail.com',subject:'Conexion Mongodb Fail',
                 text:'A fallado la conexión para mongodb db.conexiondev.link db.conexiondev.encrypt==false error:'+err})})
                 }
