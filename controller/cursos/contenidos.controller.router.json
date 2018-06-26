@@ -1,0 +1,32 @@
+[
+    {
+        "ruta":"/envia-one-contenido",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"0"
+    },
+    {
+        "ruta":"/guarda-one-contenido",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"1"
+    },
+    {
+        "ruta":"/actualiza-one-contenido",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"2"
+    },
+    {
+        "ruta":"/envia-contenidos",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"3"
+    },
+    {
+        "ruta":"/delete-contenido",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"3"
+    }
+]

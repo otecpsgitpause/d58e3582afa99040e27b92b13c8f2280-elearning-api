@@ -1,0 +1,27 @@
+[
+    {
+        "ruta":"/envia-preguntas",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"0"
+    },
+    {
+        "ruta":"/guarda-one-pregunta",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"1"
+    },
+    {
+        "ruta":"/actualiza-one-pregunta",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"2"
+    },
+    {
+        "ruta":"/delete-pregunta",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"3"
+    }
+
+]

@@ -1,0 +1,33 @@
+[
+    {
+        "ruta":"/registrar-area",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"0"
+    },
+    {
+        "ruta":"/envia-areas",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"1"
+    },
+    {
+        "ruta":"/envia-one-area",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"2"
+    },
+    {
+        "ruta":"/actualiza-one-area",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"3"
+    }
+    ,
+    {
+        "ruta":"/eliminar-one-area",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"4"
+    }
+]

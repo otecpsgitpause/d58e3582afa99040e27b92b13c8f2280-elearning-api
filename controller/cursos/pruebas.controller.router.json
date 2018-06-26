@@ -1,0 +1,32 @@
+[
+    {
+        "ruta":"/envia-pruebas",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"0"
+    },
+    {
+        "ruta":"/guarda-prueba",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"1"
+    },
+    {
+        "ruta":"/envia-one-prueba",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"2"
+    },
+    {
+        "ruta":"/actualiza-one-prueba",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"3"
+    },
+    {
+        "ruta":"/elimina-one-prueba",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"4"
+    }
+]

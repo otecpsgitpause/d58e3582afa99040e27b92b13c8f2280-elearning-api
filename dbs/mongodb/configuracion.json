@@ -1,0 +1,17 @@
+{
+    
+    "dbs": [
+        {
+            "datasource": "${datasourcedb}",
+            "conexionprod": {
+                "link": "${linkdbencry}",
+                "encrypt": true
+            },
+            "conexiondev": {
+                "link": "${linkdbdev}",
+                "encrypt": false
+            },
+            "conexionuse": "${dbtypeuse}"
+        }
+    ]
+}

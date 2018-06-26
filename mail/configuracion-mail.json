@@ -1,0 +1,7 @@
+{
+    "service": "${servicemail}",
+    "auth": {
+        "user": "${usermail}",
+        "pass": "${passwordmail}"
+    }
+}

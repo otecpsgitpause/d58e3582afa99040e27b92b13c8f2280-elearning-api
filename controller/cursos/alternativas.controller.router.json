@@ -1,0 +1,20 @@
+[
+    {
+        "ruta":"/guarda-one-alternativa",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"0"
+    },
+    {
+        "ruta":"/actualiza-one-alternativa",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"1"
+    },
+    {
+        "ruta":"/delete-alternativa",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"2"
+    }
+]
