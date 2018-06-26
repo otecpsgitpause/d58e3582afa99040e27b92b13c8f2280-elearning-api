@@ -15,7 +15,8 @@ var conexion= {
     conectar:()=>{
         
         mongoose.disconnect().then(()=>{
-            let db=configuracion.dbs[0];
+        
+            let db=process.env.configuraciondb
             if(db.conexionuse==="dev"){
                 if(db.conexiondev.encrypt==true){
                     crypto.decode(db.conexiondev.link).then((link)=>{
