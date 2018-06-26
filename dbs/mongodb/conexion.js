@@ -18,7 +18,7 @@ var conexion= {
         mongoose.disconnect().then(()=>{
             console.log('conectando db');
             mongoose.connect(dbcon,mongoOptions).then((status)=>{
-
+                console.log({status:status});
             },err=>{console.log({errorconexion:err});})
             
 
