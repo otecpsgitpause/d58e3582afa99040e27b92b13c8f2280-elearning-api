@@ -598,28 +598,34 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
                     })
 
                     if(idxCurso==-1){
-                        let newInscription = new  schemaInscCursoCliente();
-                        newInscription.fechaInscripcion=moment().format('DD-MM-YYYY');
-                        newInscription.curso=docCurso._id;
-                        newInscription.fechaCreacion=moment().unix();
-                        schemaInscCursoCliente.create(newInscription).then((newDocInscrip)=>{
-                            docCliente.inscripcionCursos.push(newDocInscrip._id);
-                            schemaCliente.updateOne({"_id":docCliente._id},docCliente).then((docClienteUpdate)=>{
-                                respuesta.sendDev({ req: req, res: res, code: 500, respuesta: { doc: true, error: null } });
+                        let newAvancesCurso = new schemaAvancesCurso();
+                        schemaAvancesCurso.create(newAvancesCurso).then((docAvanceCurso)=>{
+                            let newInscription = new  schemaInscCursoCliente();
+                            newInscription.fechaInscripcion=moment().format('DD-MM-YYYY');
+                            newInscription.curso=docCurso._id;
+                            newInscription.fechaCreacion=moment().unix();
+                            newInscription.avancescurso=newAvancesCurso;
+                            schemaInscCursoCliente.create(newInscription).then((newDocInscrip)=>{
+                                
+                                docCliente.inscripcionCursos.push(newDocInscrip._id);
+                                schemaCliente.updateOne({"_id":docCliente._id},docCliente).then((docClienteUpdate)=>{
+                                    res.status(200);
+                                })
                             })
                         })
+                        
                     }else{
-                        respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: true, error: null } });
+                        res.status(200);
                     }
 
                     
                 })
             }else{
-                respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: false, error: null } });
+                res.status(200);
             }
         })
     } catch (e) {
-        respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: false, error: 'Error inesperado' } });
+        res.status(200);
     }
 }).post(rutas[10].ruta, (req, res, next) => {
     /**
