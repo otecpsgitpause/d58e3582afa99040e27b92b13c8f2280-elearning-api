@@ -601,7 +601,9 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
     try {
         let data = req.body.data;
         let param = data.param;
+        console.log({paramRecibe:param});
         schemaCliente.findOne({"correo":param.correo}).then((doc)=>{
+            console.log({docCliente:doc});
             if(doc==null){
                 let newCliente = new schemaCliente();
                 newCliente=param;
