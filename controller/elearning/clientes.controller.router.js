@@ -589,6 +589,7 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
         let data = req.body;
         let payStudent = data.payer_email;
         let payCode = data.item_number1;
+        console.log({compraPago:data});
         schemaCliente.findOne({"correoPago":payStudent}).populate('inscripcionCursos').then((docCliente)=>{
             if(docCliente!=null){
                 schemaCurso.findOne({"codigoVenta":payCode}).then((docCurso)=>{
