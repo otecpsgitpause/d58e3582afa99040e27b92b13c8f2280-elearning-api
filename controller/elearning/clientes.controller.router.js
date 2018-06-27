@@ -610,23 +610,27 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
                                 
                                 docCliente.inscripcionCursos.push(newDocInscrip._id);
                                 schemaCliente.updateOne({"_id":docCliente._id},docCliente).then((docClienteUpdate)=>{
-                                    res.status(200);
+                                    res.status(200).json({success:true});
                                 })
                             })
                         })
                         
                     }else{
-                        res.status(200);
+                        res.status(200).json({success:true});
                     }
 
                     
                 })
             }else{
-                res.status(200);
+                res.status(200).json({success:true});
             }
+        },err=>{
+            res.status(200).json({success:true});
+        }).catch(()=>{
+            res.status(200).json({success:true});
         })
     } catch (e) {
-        res.status(200);
+        res.status(200).json({success:true});
     }
 }).post(rutas[10].ruta, (req, res, next) => {
     /**
