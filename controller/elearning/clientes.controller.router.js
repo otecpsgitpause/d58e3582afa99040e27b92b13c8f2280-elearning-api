@@ -555,29 +555,13 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
         let data = req.body.data;
         let param = data.param;
 
-        let secuencia = {
-            updateTimeClase: () => {
-                return new Promise((resolve, reject) => {
-                    schemaClase.findOne({ '_id': param.clase }).then((docClase) => {
-
-                    })
-                })
-            },
-            updateTimeModulo: () => {
-                return new Promise((resolve, reject) => {
-
-                })
-            }, updateTimeCurso: () => {
-                return new Promise((resolve, reject) => {
-
-                })
-            }
-        }
-
-
+        schemaCliente.findOne({"correo":param.correo}).then((doc)=>{
+            respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: doc, error: 'Error inesperado' } });
+        })
+        
 
     } catch (e) {
-        respuesta.sendDev({ req: req, res: res, code: 500, respuesta: { doc: null, error: 'Error inesperado' } });
+        respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: null, error: 'Error inesperado' } });
     }
 }).post(rutas[9].ruta, (req, res, next) => {
     /**
