@@ -587,9 +587,33 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
 
     try {
         let data = req.body;
+        let payStudent = data.payer_email;
         console.log({registroEstudiante:data});
     } catch (e) {
 
+    }
+}).post(rutas[10].ruta, (req, res, next) => {
+    /**
+         * Metodo registra un estudiante
+         * @param param
+         */
+
+    try {
+        let data = req.body.data;
+        let param = data.param;
+        schemaCliente.findOne({"correo":param.correo}).then((doc)=>{
+            if(doc==null){
+
+            }else if(doc!=null){
+                let sello =  Object.seal(doc);
+                let update = Object.assign(doc,param);
+                schemaCliente.updateOne({"correo":param.correo},update).then((docUpdate)=>{
+                    respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: update, error: null } });
+                })
+            }
+        })
+    } catch (e) {
+        respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: null, error: 'Error inesperado' } });
     }
 })
 

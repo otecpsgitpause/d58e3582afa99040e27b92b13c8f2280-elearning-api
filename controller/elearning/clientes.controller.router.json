@@ -58,5 +58,11 @@
         "descripcion":"",
         "metodo":"POST",
         "numero":"9"
+    },
+    {
+        "ruta":"/registrar-estudiante",
+        "descripcion":"",
+        "metodo":"POST",
+        "numero":"10"
     }
 ]
