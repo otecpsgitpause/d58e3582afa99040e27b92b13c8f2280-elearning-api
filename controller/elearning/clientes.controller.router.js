@@ -603,7 +603,11 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
         let param = data.param;
         schemaCliente.findOne({"correo":param.correo}).then((doc)=>{
             if(doc==null){
-
+                let newCliente = new schemaCliente();
+                newCliente=param;
+                schemaCliente.create(newCliente).then((docCreate)=>{
+                    respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: docCreate, error: null } });
+                })
             }else if(doc!=null){
                 let sello =  Object.seal(doc);
                 let update = Object.assign(doc,param);
