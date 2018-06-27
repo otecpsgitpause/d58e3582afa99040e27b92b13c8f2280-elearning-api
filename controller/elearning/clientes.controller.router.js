@@ -589,19 +589,30 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
         let data = req.body;
         let payStudent = data.payer_email;
         let payCode = data.item_number1;
-        schemaCliente.findOne({"correoPago":payStudent}).then((docCliente)=>{
+        schemaCliente.findOne({"correoPago":payStudent}).populate('inscripcionCursos').then((docCliente)=>{
             if(docCliente!=null){
                 schemaCurso.findOne({"codigoVenta":payCode}).then((docCurso)=>{
-                    let newInscription = new  schemaInscCursoCliente();
-                    newInscription.fechaInscripcion=moment().format('DD-MM-YYYY');
-                    newInscription.curso=docCurso._id;
-                    newInscription.fechaCreacion=moment().unix();
-                    schemaInscCursoCliente.create(newInscription).then((newDocInscrip)=>{
-                        docCliente.inscripcionCursos.push(newDocInscrip._id);
-                        schemaCliente.updateOne({"_id":docCliente._id},docCliente).then((docClienteUpdate)=>{
-                            respuesta.sendDev({ req: req, res: res, code: 500, respuesta: { doc: true, error: 'Error inesperado' } });
-                        })
+
+                    let idxCurso = _.findIndex(docCliente.inscripcionCursos,(o)=>{
+                        return o.curso==docCurso._id;
                     })
+
+                    if(idxCurso==-1){
+                        let newInscription = new  schemaInscCursoCliente();
+                        newInscription.fechaInscripcion=moment().format('DD-MM-YYYY');
+                        newInscription.curso=docCurso._id;
+                        newInscription.fechaCreacion=moment().unix();
+                        schemaInscCursoCliente.create(newInscription).then((newDocInscrip)=>{
+                            docCliente.inscripcionCursos.push(newDocInscrip._id);
+                            schemaCliente.updateOne({"_id":docCliente._id},docCliente).then((docClienteUpdate)=>{
+                                respuesta.sendDev({ req: req, res: res, code: 500, respuesta: { doc: true, error: null } });
+                            })
+                        })
+                    }else{
+                        respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: true, error: null } });
+                    }
+
+                    
                 })
             }
         })
