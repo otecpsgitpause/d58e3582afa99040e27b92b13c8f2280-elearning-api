@@ -592,7 +592,7 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
         schemaCliente.findOne({"correoPago":payStudent}).populate('inscripcionCursos').then((docCliente)=>{
             if(docCliente!=null){
                 schemaCurso.findOne({"codigoVenta":payCode}).then((docCurso)=>{
-
+                    console.log({inscripcionCursos:docCliente.inscripcionCursos});
                     let idxCurso = _.findIndex(docCliente.inscripcionCursos,(o)=>{
                         return o.curso==docCurso._id;
                     })
@@ -614,6 +614,8 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
 
                     
                 })
+            }else{
+                respuesta.sendDev({ req: req, res: res, code: 200, respuesta: { doc: false, error: null } });
             }
         })
     } catch (e) {
