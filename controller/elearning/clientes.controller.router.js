@@ -596,7 +596,9 @@ secureRouter.post(rutas[0].ruta, (req, res, next) => {
                     console.log({inscripcionCursos:docCliente.inscripcionCursos});
                     let idxCurso = _.findIndex(docCliente.inscripcionCursos,(o)=>{
                         return o.curso==docCurso._id;
-                    })
+                    }) 
+
+                    console.log({idxCursoFind:idxCurso});
 
                     if(idxCurso==-1){
                         let newAvancesCurso = new schemaAvancesCurso();
