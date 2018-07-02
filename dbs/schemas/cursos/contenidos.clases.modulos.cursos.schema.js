@@ -8,6 +8,8 @@ var modelSchema= new schema({
     descripcion:String,
     descripcionCorta:String,
     numero:String,
+    totalHoras:Number,
+    totalHorasSegundos:{type:Number,default:0},
     url:String,
     tipo:String,
     estado:Boolean,
