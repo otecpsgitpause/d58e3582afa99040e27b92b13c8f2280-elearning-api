@@ -8,6 +8,7 @@ var modelSchema= new schema({
     descripcion:String,
     descripcionCorta:String,
     totalHoras:Number,
+    totalHorasSegundos:{type:Number,default:0},
     estado:Boolean,
     fechaCreacion:Number,
     pruebas:[{type:schema.Types.ObjectId,ref:'pruebas'}],
